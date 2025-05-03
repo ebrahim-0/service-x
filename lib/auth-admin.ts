@@ -65,7 +65,7 @@ export async function createAdminUser(
       isAdmin: true,
       createdAt: new Date().toISOString(),
       createdBy: adminUser.uid,
-      username,
+      displayName: username,
       email,
     });
 
@@ -78,6 +78,30 @@ export async function createAdminUser(
       succeeded: false,
       user: null,
       error: error instanceof Error ? error.message : "Admin creation failed",
+    };
+  }
+}
+
+export async function deleteUser(userId: string) {
+  console.log("🚀 ~ deleteUser ~ userId:", userId);
+  const adminInstance = await getFirebaseAdmin();
+  const db = await getFirestore();
+
+  try {
+    // Delete the user from Firebase Authentication
+    await adminInstance.auth().deleteUser(userId);
+
+    // Delete the user document from Firestore
+    await db.collection("users").doc(userId).delete();
+
+    return {
+      succeeded: true,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      succeeded: false,
+      error: error instanceof Error ? error.message : "User deletion failed",
     };
   }
 }
