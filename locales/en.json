@@ -91,6 +91,9 @@
         "deleteUser": "Failed to delete user",
         "notAllowed": "you are not allowed to do this action",
         "deleteSelf": "can not delete your self"
+      },
+      "loading": {
+        "deleteUser": "deleting..."
       }
     },
     "sidebar": {

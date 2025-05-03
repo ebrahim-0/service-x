@@ -91,6 +91,9 @@
         "deleteUser": "فشل في حذف المستخدم",
         "notAllowed": " لا يسمح لك للقيام بهذا الإجراء",
         "deleteSelf": "لا يمكنك حذف نفسك"
+      },
+      "loading": {
+        "deleteUser": "جارى الحذف..."
       }
     },
     "sidebar": {

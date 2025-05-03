@@ -44,9 +44,12 @@ export default function UsersPage() {
 
   const deleteUserForm = withCallbacks(deleteUser, {
     onSuccess() {
+      toast.dismiss();
       toast.success(t("messages.success.deleteUser"));
     },
     onError(result) {
+      toast.dismiss();
+
       toast.error(result.error);
     },
   });
@@ -60,13 +63,13 @@ export default function UsersPage() {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = async (userId: string) => {
-    console.log("🚀 ~ handleDelete ~ userId:", userId);
+    if (userId === user?.uid) {
+      toast.error(t("messages.error.deleteSelf"));
+      return;
+    }
     if (user?.isSuperAdmin) {
-      if (userId === user?.uid) {
-        toast.error(t("messages.error.deleteSelf"));
-        return;
-      }
       startTransition(() => {
+        toast.loading(t("messages.loading.deleteUser"));
         // @ts-ignore
         deleteUserAction(userId);
       });
