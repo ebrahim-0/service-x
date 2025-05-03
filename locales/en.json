@@ -1,0 +1,102 @@
+{
+  "trans": {
+    "errors": {
+      "invalid_email": "Invalid email address",
+      "username_min_length": "Username must be at least 3 characters",
+      "password_min_length": "Password must be at least 6 characters",
+      "password_required": "Password is required"
+    },
+    "auth": {
+      "login": {
+        "title": "Login to Account",
+        "subtitle": "Please enter your email and password to continue",
+        "email": "Email address",
+        "password": "Password",
+        "forgotPassword": "Forgot Password?",
+        "rememberMe": "Remember Password",
+        "submit": "Sign In",
+        "submitting": "Signing in...",
+        "noAccount": "Don't have an account?",
+        "createAccount": "Create Account"
+      },
+      "register": {
+        "title": "Create an Account",
+        "subtitle": "Create an new admin account",
+        "email": "Email address",
+        "username": "Username",
+        "password": "Password",
+        "terms": "I accept terms and conditions",
+        "submit": "Sign Up",
+        "submitting": "Creating account...",
+        "haveAccount": "Already have an account?",
+        "login": "Login"
+      },
+      "forgotPassword": {
+        "title": "Forgot Password",
+        "subtitle": "Enter your email address to reset your password",
+        "email": "Email address",
+        "submit": "Reset Password",
+        "submitting": "Sending reset email...",
+        "rememberPassword": "Remember your password?",
+        "backToLogin": "Back to Login"
+      }
+    },
+    "home": {
+      "welcome": "Welcome Back!",
+      "logout": "Logout",
+      "createAdmin": "Create new Admin",
+      "manageUsers": "Manage Users"
+    },
+    "common": {
+      "user": "User",
+      "email": {
+        "placeholder": "name@example.com",
+        "invalid": "Invalid email address"
+      },
+      "password": {
+        "placeholder": "••••••••",
+        "minLength": "Password must be at least {{count}} characters",
+        "required": "Password is required"
+      },
+      "username": {
+        "placeholder": "Username",
+        "minLength": "Username must be at least {{count}} characters"
+      },
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "loading": "Loading..."
+    },
+    "users": {
+      "title": "Users Management",
+      "email": "Email",
+      "name": "Name",
+      "role": "Role",
+      "actions": "Actions",
+      "delete": "Delete"
+    },
+    "messages": {
+      "success": {
+        "login": "Logged in successfully!",
+        "register": "Account created successfully!",
+        "logout": "Logged out successfully",
+        "resetEmail": "Password reset email sent! Please check your email inbox.",
+        "deleteUser": "User deleted successfully"
+      },
+      "error": {
+        "login": "Failed to login",
+        "register": "Failed to create account",
+        "logout": "Failed to logout",
+        "resetEmail": "Failed to send reset email",
+        "fetchUsers": "Failed to fetch users",
+        "deleteUser": "Failed to delete user",
+        "notAllowed": "you are not allowed to do this action",
+        "deleteSelf": "can not delete your self"
+      }
+    },
+    "sidebar": {
+      "users": "Users",
+      "orders": "Orders",
+      "products": "Products"
+    }
+  }
+}
