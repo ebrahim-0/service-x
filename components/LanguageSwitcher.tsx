@@ -1,3 +1,5 @@
+"use client";
+
 import { useLocale } from "next-intl";
 import { Button } from "./ui/button";
 import { useParams, useSearchParams } from "next/navigation";

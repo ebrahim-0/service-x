@@ -2,7 +2,7 @@
 
 import { LogOut, Menu, Package, ShoppingCart, Users, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { Link, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/firebase.browser";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ import { useSelector } from "zustore";
 import { Drawer } from "./drawer";
 
 const Sidebar = () => {
+  const pathname = usePathname();
   const { replace } = useRouter();
   const t = useTranslations("trans");
 
@@ -56,7 +57,9 @@ const Sidebar = () => {
   ];
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return (
+      pathname.startsWith(path) || (path.includes(pathname) && pathname !== "/")
+    );
   };
 
   const sidebarContent = (

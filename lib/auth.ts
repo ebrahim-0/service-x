@@ -24,7 +24,16 @@ export const loginAdmin = async (
     // Check if user is an admin
     const userDoc = await getDoc(doc(firestore, "users", user.uid));
     const userData = userDoc.data();
-    console.log("🚀 ~ userData:", userData);
+
+    if (userData?.blocked) {
+      // Sign out blocked users
+      await auth.signOut();
+      return {
+        succeeded: false,
+        user: null,
+        error: "Unauthorized: Your account is blocked",
+      };
+    }
 
     if (!userData?.isAdmin) {
       // Sign out non-admin users

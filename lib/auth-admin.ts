@@ -83,7 +83,6 @@ export async function createAdminUser(
 }
 
 export async function deleteUser(userId: string) {
-  console.log("🚀 ~ deleteUser ~ userId:", userId);
   const adminInstance = await getFirebaseAdmin();
   const db = await getFirestore();
 

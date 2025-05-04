@@ -72,7 +72,22 @@
       "name": "Name",
       "role": "Role",
       "actions": "Actions",
-      "delete": "Delete"
+      "delete": "Delete",
+      "admin": "Admin",
+      "user": "User",
+      "active": "Active",
+      "blocked": "Blocked",
+      "unblock": "unblock",
+      "block": "block",
+      "noUsers": "No Users",
+      "confirmDeleteTitle": "Delete User",
+      "confirmDeleteDescription": "Are You Sure want to delete this user",
+      "cancel": "Cancel",
+      "confirmBlockTitle": "Block User",
+      "confirmUnblockTitle": "Unblock User",
+      "confirmBlockDescription": "Are You sure want to block this user",
+      "confirmUnblockDescription": "Are You sure want to unblock this user",
+      "status": "Status"
     },
     "messages": {
       "success": {
@@ -80,7 +95,10 @@
         "register": "Account created successfully!",
         "logout": "Logged out successfully",
         "resetEmail": "Password reset email sent! Please check your email inbox.",
-        "deleteUser": "User deleted successfully"
+        "deleteUser": "User deleted successfully",
+        "blockUser": "User Blocked",
+        "unblockUser": "User Unblock",
+        "passwordReset": "Password reset sent successfully"
       },
       "error": {
         "login": "Failed to login",
@@ -90,16 +108,65 @@
         "fetchUsers": "Failed to fetch users",
         "deleteUser": "Failed to delete user",
         "notAllowed": "you are not allowed to do this action",
-        "deleteSelf": "can not delete your self"
+        "deleteSelf": "can not delete your self",
+        "blockSelf": "can not block yourself"
       },
       "loading": {
-        "deleteUser": "deleting..."
+        "deleteUser": "deleting...",
+        "blockUser": "User Blocking...",
+        "unblockUser": "user Unblocking..."
       }
     },
     "sidebar": {
       "users": "Users",
       "orders": "Orders",
       "products": "Products"
-    }
+    },
+    "productLabels": {
+      "code": "Code",
+      "name": "Product Name",
+      "description": "Product Description",
+      "price": "Product Price",
+      "image": "Product Image",
+      "unmissableOffer": "UnMissable Offer",
+      "reviews": "Reviews",
+      "addReview": "Add Your Review",
+      "noProductId": "Cannot add review: Product ID is missing.",
+      "reviewerName": "Your Name",
+      "comment": "Comment",
+      "rating": "Rating (1-5)",
+      "actions": "Actions"
+    },
+    "placeholders": {
+      "productCode": "Enter Product Code",
+      "productName": "Enter Product Name",
+      "productDescription": "Enter Product Description",
+      "productPrice": "Enter Product Price",
+      "reviewerName": "Enter your name",
+      "comment": "Share your thoughts on the product"
+    },
+    "buttons": {
+      "adding": "Adding...",
+      "addProduct": "Add Product",
+      "addNewProduct": "Add New Product",
+      "close": "Close",
+      "submitReview": "Submit Review",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "updating": "Updating...",
+      "updateProduct": "Update Product"
+    },
+    "productsPage": {
+      "title": "Products List",
+      "description": "Click on a product row to view details and add a review."
+    },
+    "product": {
+      "unmissableOffer": "Special Unmissable Offer!"
+    },
+    "loadingReviews": "Loading reviews...",
+    "noReviews": "No reviews yet.",
+    "review_added_successfully": "Review submitted successfully!",
+    "submitting": "Submitting..."
   }
 }

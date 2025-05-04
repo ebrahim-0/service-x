@@ -72,7 +72,22 @@
       "name": "الاسم",
       "role": "الدور",
       "actions": "الإجراءات",
-      "delete": "حذف"
+      "delete": "حذف",
+      "admin": "مسؤل",
+      "user": "مستخدم",
+      "active": "نشيط",
+      "blocked": "محظور",
+      "unblock": "إلغاء الحظر",
+      "block": "حظر",
+      "noUsers": "لا مستخدمين",
+      "confirmDeleteTitle": "حذف المستخدم",
+      "confirmDeleteDescription": "هل انت متاكد من اتك تريد حذف هذا المستخدم",
+      "cancel": "الغاء",
+      "confirmBlockTitle": "حظر المستخدم",
+      "confirmUnblockTitle": "إلغاء حظر المستخدم",
+      "confirmBlockDescription": "هل انت متاكد من انك تريد حظر هذا المستخدم",
+      "confirmUnblockDescription": "هل انت متاكد من انك تريد الغاء حظر هذا المستخدم",
+      "status": "حالة"
     },
     "messages": {
       "success": {
@@ -80,7 +95,10 @@
         "register": "تم إنشاء الحساب بنجاح!",
         "logout": "تم تسجيل الخروج بنجاح",
         "resetEmail": "تم إرسال رابط إعادة تعيين كلمة المرور! يرجى التحقق من بريدك الإلكتروني.",
-        "deleteUser": "تم حذف المستخدم بنجاح"
+        "deleteUser": "تم حذف المستخدم بنجاح",
+        "blockUser": "تم حظر المستخدم",
+        "unblockUser": "تم الغاء الحظر",
+        "passwordReset": "تم إرسال إعادة تعيين كلمة المرور بنجاح"
       },
       "error": {
         "login": "فشل تسجيل الدخول",
@@ -90,16 +108,65 @@
         "fetchUsers": "فشل في جلب المستخدمين",
         "deleteUser": "فشل في حذف المستخدم",
         "notAllowed": " لا يسمح لك للقيام بهذا الإجراء",
-        "deleteSelf": "لا يمكنك حذف نفسك"
+        "deleteSelf": "لا يمكنك حذف نفسك",
+        "blockSelf": "لا تستطيع حظر نفسك"
       },
       "loading": {
-        "deleteUser": "جارى الحذف..."
+        "deleteUser": "جارى الحذف...",
+        "unblockUser": "إلغاء حظر المستخدم ...",
+        "blockUser": "حظر المستخدم ..."
       }
     },
     "sidebar": {
       "users": "المستخدمون",
       "orders": "الطلبات",
       "products": "المنتجات"
-    }
+    },
+    "productLabels": {
+      "code": "رمز",
+      "name": "اسم المنتج",
+      "description": "وصف المنتج",
+      "price": "سعر المنتج",
+      "image": "صورة المنتج",
+      "unmissableOffer": "عرض لا يُفوَّت",
+      "reviews": "المراجعات",
+      "addReview": "أضف مراجعتك",
+      "noProductId": "لا يمكن إضافة مراجعة: معرف المنتج مفقود.",
+      "reviewerName": "اسمك",
+      "comment": "تعليق",
+      "rating": "تصنيف (1-5)",
+      "actions": "الإجراءات"
+    },
+    "placeholders": {
+      "productCode": "أدخل رمز المنتج",
+      "productName": "أدخل اسم المنتج",
+      "productDescription": "أدخل وصف المنتج",
+      "productPrice": "أدخل سعر المنتج",
+      "reviewerName": "أدخل اسمك",
+      "comment": "شارك أفكارك حول المنتج"
+    },
+    "buttons": {
+      "adding": "جارى الاضافه...",
+      "addProduct": "أضف المنتج",
+      "addNewProduct": "أضف منتجًا جديدًا",
+      "close": "اغلاق",
+      "submitReview": "إرسال المراجعة",
+      "edit": "يحرر",
+      "delete": "يمسح",
+      "cancel": "يلغي",
+      "updating": "جارى التحديث...",
+      "updateProduct": "تحديث المنتج"
+    },
+    "productsPage": {
+      "title": "قائمة المنتجات",
+      "description": "انقر فوق صف منتج لعرض التفاصيل وإضافة مراجعة."
+    },
+    "product": {
+      "unmissableOffer": "عرض خاص لا يمكن تفويته!"
+    },
+    "loadingReviews": "مراجعات تحميل ...",
+    "noReviews": "لا مراجعات حتى الآن.",
+    "review_added_successfully": "المراجعة المقدمة بنجاح!",
+    "submitting": "تقديم..."
   }
 }

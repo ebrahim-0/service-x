@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth"; // Modular import for auth
-import { getFirestore } from "firebase/firestore"; // Modular import for Firestore
+import { getFirestore, collection } from "firebase/firestore"; // Modular import for Firestore
 import { getStorage } from "firebase/storage"; // Modular import for Storage
 
 // Your web app's Firebase configuration
@@ -26,7 +26,7 @@ export const firestore = getFirestore(app); // Using getFirestore instead of app
 export const storage = getStorage(app); // Using getStorage instead of app.storage()
 
 // export const usersCollection = collection(firestore, "users");
-// export const productsCollection = collection(firestore, "products");
+export const productsCollection = collection(firestore, "products");
 // export const ordersCollection = collection(firestore, "orders");
 
 export default app;

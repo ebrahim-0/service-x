@@ -11,6 +11,7 @@ import { withCallbacks } from "@/lib/withCallbacks";
 import { useActionState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
+import { Form } from "../ui/form";
 
 const loginSchema = (t: (key: string) => string) =>
   z.object({
@@ -26,7 +27,7 @@ export function LoginForm() {
 
   const schema = loginSchema(t);
 
-  const { control, handleSubmit } = useForm<LoginFormValues>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       email: "",
@@ -67,50 +68,52 @@ export function LoginForm() {
         <p className="text-gray-500">{t("auth.login.subtitle")}</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={control}
-          name="email"
-          label={t("auth.login.email")}
-          type="email"
-          placeholder={t("common.email.placeholder")}
-          disabled={isPending}
-        />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="email"
+            label={t("auth.login.email")}
+            type="email"
+            placeholder={t("common.email.placeholder")}
+            disabled={isPending}
+          />
 
-        <FormField
-          control={control}
-          name="password"
-          label={t("auth.login.password")}
-          type="password"
-          placeholder={t("common.password.placeholder")}
-          disabled={isPending}
-        />
+          <FormField
+            control={form.control}
+            name="password"
+            label={t("auth.login.password")}
+            type="password"
+            placeholder={t("common.password.placeholder")}
+            disabled={isPending}
+          />
 
-        <div className="flex justify-end">
-          <Link
-            href="/auth/forgot-password"
-            className="text-sm text-blue-500 hover:underline"
+          <div className="flex justify-end">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-blue-500 hover:underline"
+            >
+              {t("auth.login.forgotPassword")}
+            </Link>
+          </div>
+
+          <Button
+            variant="primary"
+            type="submit"
+            className="w-full"
+            disabled={isPending}
           >
-            {t("auth.login.forgotPassword")}
-          </Link>
-        </div>
+            {isPending ? t("auth.login.submitting") : t("auth.login.submit")}
+          </Button>
 
-        <Button
-          variant="primary"
-          type="submit"
-          className="w-full"
-          disabled={isPending}
-        >
-          {isPending ? t("auth.login.submitting") : t("auth.login.submit")}
-        </Button>
-
-        {/* <p className="text-sm text-center text-gray-500">
+          {/* <p className="text-sm text-center text-gray-500">
           {t("auth.login.noAccount")}{" "}
           <Link to="/auth/register" className="text-blue-500 hover:underline">
             {t("auth.login.createAccount")}
           </Link>
         </p> */}
-      </form>
+        </form>
+      </Form>
 
       {state?.error && (
         <p className="mt-2 text-sm text-center text-red-500">{state.error}</p>
