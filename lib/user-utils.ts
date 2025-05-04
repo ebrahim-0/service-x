@@ -1,5 +1,12 @@
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 import { firestore } from "@/lib/firebase/firebase.browser";
+import { getTranslations } from "next-intl/server";
 
 interface User {
   id: string;
@@ -32,6 +39,8 @@ export const blockUser = async ({
   userId: string | null;
   block: boolean;
 }): Promise<ActionResult & { userId: string; blocked: boolean }> => {
+  const t = await getTranslations("trans");
+
   if (!userId) {
     return {
       succeeded: false,
@@ -43,6 +52,18 @@ export const blockUser = async ({
 
   try {
     const userRef = doc(firestore, "users", userId);
+
+    const isSuperAdmin = await (await getDoc(userRef)).get("isSuperAdmin");
+
+    if (isSuperAdmin) {
+      return {
+        succeeded: false,
+        userId,
+        blocked: block,
+        error: t("messages.error.notAllowed"),
+      };
+    }
+
     await updateDoc(userRef, { blocked: block });
     return { succeeded: true, userId, blocked: block };
   } catch (error) {

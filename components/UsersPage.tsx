@@ -124,15 +124,12 @@ export default function UsersPage() {
       toast.error(t("messages.error.blockSelf"));
       return;
     }
-    if (user?.isSuperAdmin) {
-      setBlockDialog({
-        open: true,
-        userId,
-        action: blocked ? "unblock" : "block",
-      });
-    } else {
-      toast.error(t("messages.error.notAllowed"));
-    }
+
+    setBlockDialog({
+      open: true,
+      userId,
+      action: blocked ? "unblock" : "block",
+    });
   };
 
   const confirmBlockToggle = () => {
