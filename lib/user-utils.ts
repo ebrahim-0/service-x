@@ -6,7 +6,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/firebase.browser";
-import { getTranslations } from "next-intl/server";
 
 interface User {
   id: string;
@@ -39,8 +38,6 @@ export const blockUser = async ({
   userId: string | null;
   block: boolean;
 }): Promise<ActionResult & { userId: string; blocked: boolean }> => {
-  const t = await getTranslations("trans");
-
   if (!userId) {
     return {
       succeeded: false,
@@ -60,7 +57,7 @@ export const blockUser = async ({
         succeeded: false,
         userId,
         blocked: block,
-        error: t("messages.error.notAllowed"),
+        error: "Unauthorized: Cannot block super admin",
       };
     }
 
