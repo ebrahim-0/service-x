@@ -169,6 +169,7 @@
     "loadingReviews": "مراجعات تحميل ...",
     "noReviews": "لا مراجعات حتى الآن.",
     "review_added_successfully": "المراجعة المقدمة بنجاح!",
-    "submitting": "تقديم..."
+    "submitting": "تقديم...",
+    "currencySymbol": "جنيه مصري"
   }
 }

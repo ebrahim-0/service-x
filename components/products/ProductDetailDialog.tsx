@@ -149,7 +149,7 @@ const ProductDetailDialog: React.FC<ProductDetailDialogProps> = ({
               {product.description}
             </p>
             <p>
-              <strong>{t("productLabels.price")}:</strong> $
+              <strong>{t("productLabels.price")}:</strong> {t("currencySymbol")}
               {product.price.toFixed(2)}
             </p>
             {product.unmissableOffer && (

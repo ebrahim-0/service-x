@@ -2,14 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -26,13 +18,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Edit, Trash2 } from "lucide-react";
 
-interface ProductsTableProps {
+interface ProductsListProps {
   refreshKey?: number;
   onProductUpdated?: () => void;
   onProductDeleted?: () => void;
 }
 
-const ProductsTable: React.FC<ProductsTableProps> = ({
+const ProductsList: React.FC<ProductsListProps> = ({
   refreshKey,
   onProductUpdated,
   onProductDeleted,
@@ -142,25 +134,33 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   };
 
   if (loading) {
-    return <div>{t("loading")}</div>;
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <p className="text-gray-500 text-sm sm:text-base">{t("loading")}</p>
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div>
-        <p className="text-red-500 mb-4">{error}</p>
+      <div className="max-w-full sm:max-w-5xl mx-auto">
+        <p className="text-red-500 mb-4 text-sm sm:text-base">{error}</p>
         {products.length > 0 && (
-          <p className="text-orange-500 mb-4">{t("displayingSampleData")}</p>
+          <p className="text-orange-500 mb-4 text-sm sm:text-base">
+            {t("displayingSampleData")}
+          </p>
         )}
         {products.length > 0 ? (
-          <ProductsTableView
+          <ProductsListView
             products={products}
             onRowClick={handleRowClick}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
           />
         ) : (
-          <p>{t("couldNotLoadProducts")}</p>
+          <p className="text-gray-500 text-sm sm:text-base">
+            {t("couldNotLoadProducts")}
+          </p>
         )}
         {selectedProduct && (
           <ProductDetailDialog
@@ -177,12 +177,20 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   }
 
   if (products.length === 0) {
-    return <div>{t("noProductsFound")}</div>;
+    return (
+      <div className="container px-4 py-6 sm:py-8 mx-auto">
+        <div className="max-w-full sm:max-w-5xl mx-auto">
+          <p className="text-gray-500 text-sm sm:text-base">
+            {t("noProductsFound")}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <ProductsTableView
+    <div className="max-w-full mx-auto">
+      <ProductsListView
         products={products}
         onRowClick={handleRowClick}
         onEditClick={handleEditClick}
@@ -208,16 +216,19 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           })
         }
       >
-        <DialogContent>
+        <DialogContent className="w-11/12 sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t("productLabels.confirmDeleteTitle")}</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-base sm:text-lg">
+              {t("productLabels.confirmDeleteTitle")}
+            </DialogTitle>
+            <DialogDescription className="text-sm sm:text-base">
               {t("productLabels.confirmDeleteDescription")}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
             <Button
               variant="outline"
+              size="sm"
               onClick={() =>
                 setDeleteDialog({
                   open: false,
@@ -228,7 +239,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
             >
               {t("buttons.cancel")}
             </Button>
-            <Button variant="destructive" onClick={confirmDelete}>
+            <Button variant="destructive" size="sm" onClick={confirmDelete}>
               {t("buttons.delete")}
             </Button>
           </DialogFooter>
@@ -238,14 +249,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   );
 };
 
-interface ProductsTableViewProps {
+interface ProductsListViewProps {
   products: Product[];
   onRowClick: (product: Product) => void;
   onEditClick: (product: Product) => void;
   onDeleteClick: (productId: string, productName: string) => void;
 }
 
-const ProductsTableView: React.FC<ProductsTableViewProps> = ({
+const ProductsListView: React.FC<ProductsListViewProps> = ({
   products,
   onRowClick,
   onEditClick,
@@ -254,65 +265,84 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = ({
   const t = useTranslations("trans");
 
   return (
-    <div className="overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("productLabels.code")}</TableHead>
-            <TableHead>{t("productLabels.name")}</TableHead>
-            <TableHead>{t("productLabels.price")}</TableHead>
-            <TableHead>{t("productLabels.actions")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product, index) => (
-            <TableRow
-              key={product.id || product.code}
-              onClick={() => onRowClick(product)}
-              className={`${
-                index % 2 === 0 ? "bg-white" : "bg-gray-50"
-              } cursor-pointer hover:bg-muted/50 transition-colors`}
-            >
-              <TableCell>{product.code}</TableCell>
-              <TableCell>{product.name || "N/A"}</TableCell>
-              <TableCell>${product.price.toFixed(2)}</TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent row click
-                      onEditClick(product);
-                    }}
-                  >
-                    <Edit className="w-4 h-4" />
-                    {t("buttons.edit")}
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent row click
-                      if (product.id)
-                        onDeleteClick(
-                          product.id,
-                          product.name || "Unnamed Product"
-                        );
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-
-                    {t("buttons.delete")}
-                  </Button>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {products.map((product) => (
+        <div
+          key={product.id || product.code}
+          className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          onClick={() => onRowClick(product)}
+        >
+          <div className="space-y-2 text-sm sm:text-base">
+            <div className="w-full h-40 sm:h-48 bg-gray-200 rounded-md flex items-center justify-center overflow-hidden">
+              {product.imageUrl ? (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name || "Product"}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div
+                  className={`w-full h-full flex items-center justify-center text-gray-500 text-xs sm:text-sm`}
+                >
+                  No Image Available
                 </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              )}
+            </div>
+            <div>
+              <span className="font-semibold text-gray-700">
+                {t("productLabels.code")}:
+              </span>{" "}
+              <span className="text-gray-800">{product.code}</span>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-700">
+                {t("productLabels.name")}:
+              </span>{" "}
+              <span className="text-gray-800">{product.name || "N/A"}</span>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-700">
+                {t("productLabels.price")}:
+              </span>{" "}
+              <span className="text-gray-800">
+                {product.price.toFixed(2)} {t("currencySymbol")}
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent card click
+                  onEditClick(product);
+                }}
+              >
+                <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+                {t("buttons.edit")}
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent card click
+                  if (product.id)
+                    onDeleteClick(
+                      product.id,
+                      product.name || "Unnamed Product"
+                    );
+                }}
+              >
+                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                {t("buttons.delete")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default ProductsTable;
+export default ProductsList;

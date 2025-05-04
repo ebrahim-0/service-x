@@ -169,6 +169,7 @@
     "loadingReviews": "Loading reviews...",
     "noReviews": "No reviews yet.",
     "review_added_successfully": "Review submitted successfully!",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "currencySymbol": "EGP"
   }
 }

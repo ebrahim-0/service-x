@@ -163,108 +163,99 @@ export default function UsersPage() {
   if (loading) {
     return (
       <div className="flex h-screen justify-center items-center">
-        <Loader className="w-12 h-12 text-blue-600 animate-spin" />
+        <Loader className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="container px-4 py-8 mx-auto">
-      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">
+    <div className="">
+      <div className="max-w-full sm:max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="p-4 sm:p-6 lg:p-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
             {t("users.title")}
           </h1>
           {users.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">
               {t("users.noUsers")}
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full rtl:text-right ltr:text-left">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="p-4 font-semibold text-gray-700">
-                      {t("users.email")}
-                    </th>
-                    <th className="p-4 font-semibold text-gray-700">
-                      {t("users.name")}
-                    </th>
-                    <th className="p-4 font-semibold text-gray-700">
-                      {t("users.role")}
-                    </th>
-                    <th className="p-4 font-semibold text-gray-700">
-                      {t("users.status")}
-                    </th>
-                    <th className="p-4 font-semibold text-gray-700">
-                      {t("users.actions")}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user, index) => (
-                    <tr
-                      key={user.id}
-                      className={`border-b ${
-                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } hover:bg-gray-100 transition-colors`}
-                    >
-                      <td className="p-4 text-gray-800">{user.email}</td>
-                      <td className="p-4 text-gray-800">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {users.map((user) => (
+                <div
+                  key={user.id}
+                  className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="space-y-2 text-sm sm:text-base">
+                    <div>
+                      <span className="font-semibold text-gray-700">
+                        {t("users.email")}:
+                      </span>{" "}
+                      <span className="text-gray-800">{user.email}</span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700">
+                        {t("users.name")}:
+                      </span>{" "}
+                      <span className="text-gray-800">
                         {user.displayName || "N/A"}
-                      </td>
-                      <td className="p-4 text-gray-800">
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700">
+                        {t("users.role")}:
+                      </span>{" "}
+                      <span className="text-gray-800">
                         {user.isAdmin ? t("users.admin") : t("users.user")}
-                      </td>
-                      <td className="p-4">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            user.blocked
-                              ? "bg-red-100 text-red-800"
-                              : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {user.blocked
-                            ? t("users.blocked")
-                            : t("users.active")}
-                        </span>
-                      </td>
-                      <td className="p-4 flex space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className={`flex w-32 items-center gap-2 ${
-                            user.blocked
-                              ? "border-green-500 text-green-600 hover:bg-green-50"
-                              : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
-                          }`}
-                          onClick={() =>
-                            handleBlockToggle(user.id, user.blocked)
-                          }
-                          disabled={isPending}
-                        >
-                          {user.blocked ? (
-                            <Unlock className="w-4 h-4" />
-                          ) : (
-                            <Lock className="w-4 h-4" />
-                          )}
-                          {user.blocked ? t("users.unblock") : t("users.block")}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="flex items-center gap-2"
-                          onClick={() => handleDelete(user.id)}
-                          disabled={isPending}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          {t("users.delete")}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700">
+                        {t("users.status")}:
+                      </span>{" "}
+                      <span
+                        className={`inline-block px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                          user.blocked
+                            ? "bg-red-100 text-red-800"
+                            : "bg-green-100 text-green-800"
+                        }`}
+                      >
+                        {user.blocked ? t("users.blocked") : t("users.active")}
+                      </span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm ${
+                          user.blocked
+                            ? "border-green-500 text-green-600 hover:bg-green-50"
+                            : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                        }`}
+                        onClick={() => handleBlockToggle(user.id, user.blocked)}
+                        disabled={isPending}
+                      >
+                        {user.blocked ? (
+                          <Unlock className="w-3 h-3 sm:w-4 sm:h-4" />
+                        ) : (
+                          <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
+                        )}
+                        {user.blocked ? t("users.unblock") : t("users.block")}
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm"
+                        onClick={() => handleDelete(user.id)}
+                        disabled={isPending}
+                      >
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                        {t("users.delete")}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -277,21 +268,24 @@ export default function UsersPage() {
           setDeleteDialog({ open, userId: open ? deleteDialog.userId : null })
         }
       >
-        <DialogContent>
+        <DialogContent className="w-11/12 sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t("users.confirmDeleteTitle")}</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-base sm:text-lg">
+              {t("users.confirmDeleteTitle")}
+            </DialogTitle>
+            <DialogDescription className="text-sm sm:text-base">
               {t("users.confirmDeleteDescription")}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
             <Button
               variant="outline"
+              size="sm"
               onClick={() => setDeleteDialog({ open: false, userId: null })}
             >
               {t("users.cancel")}
             </Button>
-            <Button variant="destructive" onClick={confirmDelete}>
+            <Button variant="destructive" size="sm" onClick={confirmDelete}>
               {t("users.delete")}
             </Button>
           </DialogFooter>
@@ -309,22 +303,23 @@ export default function UsersPage() {
           })
         }
       >
-        <DialogContent>
+        <DialogContent className="w-11/12 sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-base sm:text-lg">
               {blockDialog.action === "block"
                 ? t("users.confirmBlockTitle")
                 : t("users.confirmUnblockTitle")}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-sm sm:text-base">
               {blockDialog.action === "block"
                 ? t("users.confirmBlockDescription")
                 : t("users.confirmUnblockDescription")}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
             <Button
               variant="outline"
+              size="sm"
               onClick={() =>
                 setBlockDialog({ open: false, userId: null, action: "block" })
               }
@@ -335,6 +330,7 @@ export default function UsersPage() {
               variant={
                 blockDialog.action === "block" ? "destructive" : "default"
               }
+              size="sm"
               onClick={confirmBlockToggle}
             >
               {blockDialog.action === "block"

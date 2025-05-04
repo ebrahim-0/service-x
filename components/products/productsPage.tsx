@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import ProductsTable from "@/components/products/ProductsTable";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import AddProductForm from "./AddProductForm";
 import { useTranslations } from "next-intl";
+import ProductsList from "./ProductsList";
 
 // Basic Page component to render the ProductsTable and Add Product Dialog
 export default function ProductsPage() {
@@ -33,11 +33,11 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <main className="container mx-auto px-4 py-8 md:p-8">
-      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+    <section>
+      <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
               {t("productsPage.title")}
             </h1>
             {/* Add New Product Button and Dialog */}
@@ -60,9 +60,9 @@ export default function ProductsPage() {
           <p className="text-muted-foreground mb-6">
             {t("productsPage.description")}
           </p>
-          <ProductsTable key={refreshKey} />
+          <ProductsList key={refreshKey} />
         </div>
       </div>
-    </main>
+    </section>
   );
 }
