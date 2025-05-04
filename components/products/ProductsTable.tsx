@@ -1,167 +1,3 @@
-// "use client";
-
-// import React, { useState, useEffect } from "react";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import { Product } from "@/lib/schemas";
-// import ProductDetailDialog from "./ProductDetailDialog";
-// import { collection, getDocs } from "firebase/firestore";
-// import { firestore } from "@/lib/firebase/firebase.browser";
-// import { useTranslations } from "next-intl";
-
-// // Accept key prop for refresh mechanism
-// interface ProductsTableProps {
-//   refreshKey?: number; // Optional key to trigger refresh
-// }
-
-// const ProductsTable: React.FC<ProductsTableProps> = ({ refreshKey }) => {
-//   const [products, setProducts] = useState<Product[]>([]);
-//   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-//   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const fetchProducts = async () => {
-//       setLoading(true);
-//       setError(null);
-//       try {
-//         const productsCollection = collection(firestore, "products");
-
-//         const querySnapshot = await getDocs(productsCollection);
-//         const fetchedProducts: Product[] = [];
-//         querySnapshot.forEach((doc) => {
-//           fetchedProducts.push({ id: doc.id, ...doc.data() } as Product);
-//         });
-//         setProducts(fetchedProducts);
-//       } catch (err) {
-//         console.error("Error fetching products: ", err);
-//         setError(
-//           "Failed to load special offer products. Please ensure Firebase is configured correctly."
-//         );
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProducts();
-//     // Add refreshKey to the dependency array
-//     // When the key changes (passed from parent), this effect will re-run
-//   }, [refreshKey]);
-
-//   const handleRowClick = (product: Product) => {
-//     setSelectedProduct(product);
-//     setIsDetailDialogOpen(true);
-//   };
-
-//   const handleDialogClose = () => {
-//     setIsDetailDialogOpen(false);
-//     setSelectedProduct(null);
-//   };
-
-//   if (loading) {
-//     return <div>Loading special offers...</div>;
-//   }
-
-//   if (error) {
-//     return (
-//       <div>
-//         <p className="text-red-500 mb-4">{error}</p>
-//         {products.length > 0 && (
-//           <p className="text-orange-500 mb-4">
-//             Displaying sample data due to error.
-//           </p>
-//         )}
-//         {products.length > 0 ? (
-//           <ProductsTableView products={products} onRowClick={handleRowClick} />
-//         ) : (
-//           <p>Could not load products.</p>
-//         )}
-//         {selectedProduct && (
-//           <ProductDetailDialog
-//             product={selectedProduct}
-//             isOpen={isDetailDialogOpen}
-//             onClose={handleDialogClose}
-//           />
-//         )}
-//       </div>
-//     );
-//   }
-
-//   if (products.length === 0) {
-//     return <div>No special offer products found.</div>;
-//   }
-
-//   return (
-//     <div>
-//       <ProductsTableView products={products} onRowClick={handleRowClick} />
-//       {selectedProduct && (
-//         <ProductDetailDialog
-//           product={selectedProduct}
-//           isOpen={isDetailDialogOpen}
-//           onClose={handleDialogClose}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// // Separate presentational component for the table view
-// interface ProductsTableViewProps {
-//   products: Product[];
-//   onRowClick: (product: Product) => void;
-// }
-
-// const ProductsTableView: React.FC<ProductsTableViewProps> = ({
-//   products,
-//   onRowClick,
-// }) => {
-//   const t = useTranslations("trans");
-
-//   return (
-//     <div className="overflow-x-auto">
-//       <table className="w-full rtl:text-right ltr:text-left">
-//         <thead className="bg-gray-100">
-//           <tr>
-//             <th className="p-4 font-semibold text-gray-700">
-//               {t("productLabels.code")}
-//             </th>
-//             <th className="p-4 font-semibold text-gray-700">
-//               {t("productLabels.name")}
-//             </th>
-//             <th className="p-4 font-semibold text-gray-700">
-//               {t("productLabels.price")}
-//             </th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {products.map((product, index) => (
-//             <tr
-//               key={product.id || product.code}
-//               onClick={() => onRowClick(product)}
-//               className={`border-b ${
-//                 index % 2 === 0 ? "bg-white" : "bg-gray-50"
-//               } cursor-pointer hover:bg-muted/50 transition-colors`}
-//             >
-//               <td className="p-4 text-gray-800">{product.code}</td>
-//               <td className="p-4 text-gray-800">{product.name || "N/A"}</td>
-//               <td className="p-4 text-gray-800">${product.price.toFixed(2)}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default ProductsTable;
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -173,6 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Product } from "@/lib/schemas";
 import ProductDetailDialog from "./ProductDetailDialog";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
@@ -180,6 +24,7 @@ import { firestore } from "@/lib/firebase/firebase.browser";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Edit, Trash2 } from "lucide-react";
 
 interface ProductsTableProps {
   refreshKey?: number;
@@ -196,6 +41,11 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState<{
+    open: boolean;
+    productId: string | null;
+    productName: string | null;
+  }>({ open: false, productId: null, productName: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -246,11 +96,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
     setIsDetailDialogOpen(true);
   };
 
-  const handleDeleteClick = async (productId: string) => {
-    if (confirm(t("productLabels.confirmDelete"))) {
+  const handleDeleteClick = (productId: string, productName: string) => {
+    setDeleteDialog({ open: true, productId, productName });
+  };
+
+  const confirmDelete = async () => {
+    if (deleteDialog.productId) {
       try {
-        await deleteDoc(doc(firestore, "products", productId));
-        setProducts((prev) => prev.filter((p) => p.id !== productId));
+        await deleteDoc(doc(firestore, "products", deleteDialog.productId));
+        setProducts((prev) =>
+          prev.filter((p) => p.id !== deleteDialog.productId)
+        );
         toast.success("Product deleted successfully!");
         if (onProductDeleted) {
           onProductDeleted();
@@ -258,6 +114,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
       } catch (error) {
         console.error("Error deleting product: ", error);
         toast.error("Failed to delete product.");
+      } finally {
+        setDeleteDialog({ open: false, productId: null, productName: null });
       }
     }
   };
@@ -340,6 +198,42 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           onProductDeleted={handleProductDeleted}
         />
       )}
+      <Dialog
+        open={deleteDialog.open}
+        onOpenChange={(open) =>
+          setDeleteDialog({
+            open,
+            productId: open ? deleteDialog.productId : null,
+            productName: open ? deleteDialog.productName : null,
+          })
+        }
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("productLabels.confirmDeleteTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("productLabels.confirmDeleteDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() =>
+                setDeleteDialog({
+                  open: false,
+                  productId: null,
+                  productName: null,
+                })
+              }
+            >
+              {t("buttons.cancel")}
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              {t("buttons.delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -348,7 +242,7 @@ interface ProductsTableViewProps {
   products: Product[];
   onRowClick: (product: Product) => void;
   onEditClick: (product: Product) => void;
-  onDeleteClick: (productId: string) => void;
+  onDeleteClick: (productId: string, productName: string) => void;
 }
 
 const ProductsTableView: React.FC<ProductsTableViewProps> = ({
@@ -392,6 +286,7 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = ({
                       onEditClick(product);
                     }}
                   >
+                    <Edit className="w-4 h-4" />
                     {t("buttons.edit")}
                   </Button>
                   <Button
@@ -399,9 +294,15 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = ({
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent row click
-                      if (product.id) onDeleteClick(product.id);
+                      if (product.id)
+                        onDeleteClick(
+                          product.id,
+                          product.name || "Unnamed Product"
+                        );
                     }}
                   >
+                    <Trash2 className="w-4 h-4" />
+
                     {t("buttons.delete")}
                   </Button>
                 </div>

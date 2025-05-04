@@ -135,7 +135,9 @@
       "reviewerName": "اسمك",
       "comment": "تعليق",
       "rating": "تصنيف (1-5)",
-      "actions": "الإجراءات"
+      "actions": "الإجراءات",
+      "confirmDeleteTitle": "حذف المنتج",
+      "confirmDeleteDescription": "هل تريد حذف هذا المنتج"
     },
     "placeholders": {
       "productCode": "أدخل رمز المنتج",
@@ -151,8 +153,8 @@
       "addNewProduct": "أضف منتجًا جديدًا",
       "close": "اغلاق",
       "submitReview": "إرسال المراجعة",
-      "edit": "يحرر",
-      "delete": "يمسح",
+      "edit": "تعديل",
+      "delete": "حذف",
       "cancel": "يلغي",
       "updating": "جارى التحديث...",
       "updateProduct": "تحديث المنتج"

@@ -135,7 +135,9 @@
       "reviewerName": "Your Name",
       "comment": "Comment",
       "rating": "Rating (1-5)",
-      "actions": "Actions"
+      "actions": "Actions",
+      "confirmDeleteTitle": "Delete Product",
+      "confirmDeleteDescription": "Are you sure want to delete this product"
     },
     "placeholders": {
       "productCode": "Enter Product Code",

@@ -20,9 +20,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firestore, storage } from "@/lib/firebase/firebase.browser";
 import { toast } from "sonner";
-// Assuming useTranslations is set up correctly in your Next.js internationalization
-// For simplicity, we'll use plain strings here.
-// import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 interface AddProductFormProps {
   onProductAdded?: () => void; // Optional callback after product is added
@@ -33,8 +31,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   onProductAdded,
   closeDialog,
 }) => {
-  // const t = useTranslations('trans'); // If using next-intl
-  const t = (key: string) => key; // Placeholder translation function
+  const t = useTranslations("trans"); // If using next-intl
 
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -108,7 +105,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
               <FormLabel>{t("productLabels.code")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={t("placeholders.productCode")}
+                  // placeholder={t("placeholders.productCode")}
+                  placeholder={t("productLabels.code")}
                   {...field}
                   disabled={isPending}
                 />
