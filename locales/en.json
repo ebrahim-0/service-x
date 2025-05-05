@@ -170,6 +170,42 @@
     "noReviews": "No reviews yet.",
     "review_added_successfully": "Review submitted successfully!",
     "submitting": "Submitting...",
-    "currencySymbol": "EGP"
+    "currencySymbol": "EGP",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "loading": "loading",
+    "orders": {
+      "title": "Orders",
+      "filterByStatus": "Filter By Status",
+      "allStatuses": "All Statuses",
+      "pending": "Pending",
+      "approve": "Approve",
+      "reject": "Reject",
+      "clear": "Clear",
+      "noOrdersFound": "No Orders Found",
+      "noOrders": "No Orders",
+      "orderId": "Order Id",
+      "date": "Date",
+      "status": "Status",
+      "totalPrice": "Total Price",
+      "products": "Products",
+      "paymentMethod": "Payment Method",
+      "shippingAddress": "Shipping Address",
+      "name": "Name",
+      "address": "Address",
+      "addressDetails": "Address Details",
+      "city": "City",
+      "email": "Email",
+      "phone": "Phone",
+      "detailsTitle": "Order Details",
+      "error": {
+        "fetchOrders": "Failed get orders"
+      },
+      "success": {
+        "updateStatus": "order updated"
+      }
+    }
   }
 }

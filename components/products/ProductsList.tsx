@@ -9,14 +9,32 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Product } from "@/lib/schemas";
 import ProductDetailDialog from "./ProductDetailDialog";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  limit,
+  orderBy,
+  startAfter,
+} from "firebase/firestore";
 import { firestore } from "@/lib/firebase/firebase.browser";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Edit, Trash2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ProductsListProps {
   refreshKey?: number;
@@ -29,7 +47,11 @@ const ProductsList: React.FC<ProductsListProps> = ({
   onProductUpdated,
   onProductDeleted,
 }) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
   const [products, setProducts] = useState<Product[]>([]);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -40,20 +62,58 @@ const ProductsList: React.FC<ProductsListProps> = ({
   }>({ open: false, productId: null, productName: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(
+    !isNaN(initialPage) && initialPage > 0 ? initialPage : 1
+  );
+  const [itemsPerPage] = useState(10); // Adjustable number of products per page
 
   const t = useTranslations("trans");
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page: number, itemsPerPage: number) => {
     setLoading(true);
     setError(null);
     try {
-      const productsCollection = collection(firestore, "products");
-      const querySnapshot = await getDocs(productsCollection);
+      // Get total count of products
+      const totalSnapshot = await getDocs(collection(firestore, "products"));
+      const total = totalSnapshot.size;
+
+      // Calculate the offset for pagination
+      const offset = (page - 1) * itemsPerPage;
+
+      // Query for paginated products
+      let productsQuery = query(
+        collection(firestore, "products"),
+        orderBy("code"),
+        limit(itemsPerPage)
+      );
+
+      // If not the first page, start after the last document of the previous page
+      if (offset > 0) {
+        const prevPageSnapshot = await getDocs(
+          query(
+            collection(firestore, "products"),
+            orderBy("code"),
+            limit(offset)
+          )
+        );
+        const lastDoc = prevPageSnapshot.docs[prevPageSnapshot.docs.length - 1];
+        productsQuery = query(
+          collection(firestore, "products"),
+          orderBy("code"),
+          startAfter(lastDoc),
+          limit(itemsPerPage)
+        );
+      }
+
+      const querySnapshot = await getDocs(productsQuery);
       const fetchedProducts: Product[] = [];
       querySnapshot.forEach((doc) => {
         fetchedProducts.push({ id: doc.id, ...doc.data() } as Product);
       });
+
       setProducts(fetchedProducts);
+      setTotalProducts(total);
+
       if (selectedProduct && selectedProduct.id) {
         const updatedProduct = fetchedProducts.find(
           (p) => p.id === selectedProduct.id
@@ -61,6 +121,16 @@ const ProductsList: React.FC<ProductsListProps> = ({
         if (updatedProduct) {
           setSelectedProduct(updatedProduct);
         }
+      }
+
+      // Check if the current page is valid
+      const totalPages = Math.ceil(total / itemsPerPage);
+      if (page > totalPages || page < 1) {
+        // Redirect to page 1 if the requested page is invalid
+        setCurrentPage(1);
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+        newSearchParams.set("page", "1");
+        router.replace(`?${newSearchParams.toString()}`, { scroll: false });
       }
     } catch (err) {
       console.error("Error fetching products: ", err);
@@ -73,8 +143,8 @@ const ProductsList: React.FC<ProductsListProps> = ({
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, [refreshKey]);
+    fetchProducts(currentPage, itemsPerPage);
+  }, [currentPage, itemsPerPage, refreshKey]);
 
   const handleRowClick = (product: Product) => {
     setSelectedProduct(product);
@@ -99,9 +169,14 @@ const ProductsList: React.FC<ProductsListProps> = ({
         setProducts((prev) =>
           prev.filter((p) => p.id !== deleteDialog.productId)
         );
+        setTotalProducts((prev) => prev - 1);
         toast.success("Product deleted successfully!");
         if (onProductDeleted) {
           onProductDeleted();
+        }
+        // Navigate to previous page if current page becomes empty
+        if (products.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
         }
       } catch (error) {
         console.error("Error deleting product: ", error);
@@ -119,18 +194,31 @@ const ProductsList: React.FC<ProductsListProps> = ({
   };
 
   const handleProductUpdated = () => {
-    fetchProducts();
+    fetchProducts(currentPage, itemsPerPage);
     if (onProductUpdated) {
       onProductUpdated();
     }
   };
 
   const handleProductDeleted = () => {
-    fetchProducts();
+    fetchProducts(currentPage, itemsPerPage);
     if (onProductDeleted) {
       onProductDeleted();
     }
     handleDialogClose();
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      // Update URL with new page query parameter
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.set("page", page.toString());
+      router.push(`?${newSearchParams.toString()}`, { scroll: false });
+    }
   };
 
   if (loading) {
@@ -151,12 +239,54 @@ const ProductsList: React.FC<ProductsListProps> = ({
           </p>
         )}
         {products.length > 0 ? (
-          <ProductsListView
-            products={products}
-            onRowClick={handleRowClick}
-            onEditClick={handleEditClick}
-            onDeleteClick={handleDeleteClick}
-          />
+          <>
+            <ProductsListView
+              products={products}
+              onRowClick={handleRowClick}
+              onEditClick={handleEditClick}
+              onDeleteClick={handleDeleteClick}
+            />
+            {totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        className={
+                          currentPage === 1
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(page)}
+                            isActive={currentPage === page}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      )
+                    )}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        className={
+                          currentPage === totalPages
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
+          </>
         ) : (
           <p className="text-gray-500 text-sm sm:text-base">
             {t("couldNotLoadProducts")}
@@ -176,7 +306,7 @@ const ProductsList: React.FC<ProductsListProps> = ({
     );
   }
 
-  if (products.length === 0) {
+  if (products.length === 0 && totalProducts === 0) {
     return (
       <div className="container px-4 py-6 sm:py-8 mx-auto">
         <div className="max-w-full sm:max-w-5xl mx-auto">
@@ -196,6 +326,44 @@ const ProductsList: React.FC<ProductsListProps> = ({
         onEditClick={handleEditClick}
         onDeleteClick={handleDeleteClick}
       />
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      onClick={() => handlePageChange(page)}
+                      isActive={currentPage === page}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
       {selectedProduct && (
         <ProductDetailDialog
           product={selectedProduct}
@@ -249,6 +417,7 @@ const ProductsList: React.FC<ProductsListProps> = ({
   );
 };
 
+// ProductsListView component remains unchanged
 interface ProductsListViewProps {
   products: Product[];
   onRowClick: (product: Product) => void;

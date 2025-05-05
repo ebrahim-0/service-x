@@ -170,6 +170,42 @@
     "noReviews": "لا مراجعات حتى الآن.",
     "review_added_successfully": "المراجعة المقدمة بنجاح!",
     "submitting": "تقديم...",
-    "currencySymbol": "جنيه مصري"
+    "currencySymbol": "جنيه مصري",
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "loading": "تحميل",
+    "orders": {
+      "title": "الطلبات",
+      "filterByStatus": "تصفية حسب الحالة",
+      "allStatuses": "جميع الحالات",
+      "pending": "قيد الانتظار",
+      "approve": "موافقة",
+      "reject": "يرفض",
+      "clear": "اعادة تعيين",
+      "noOrdersFound": "لم يتم العثور على طلبات",
+      "noOrders": "لا يوجد طلبات",
+      "orderId": "معرف الطلب",
+      "date": "تاريخ",
+      "status": "حالة",
+      "totalPrice": "إجمالي السعر",
+      "products": "منتجات",
+      "paymentMethod": "طريقة الدفع",
+      "shippingAddress": "عنوان الشحن",
+      "name": "اسم",
+      "address": "عنوان",
+      "addressDetails": "تفاصيل العنوان",
+      "city": "مدينة",
+      "email": "بريد إلكتروني",
+      "phone": "هاتف",
+      "detailsTitle": "طلب تفاصيل",
+      "error": {
+        "fetchOrders": "فشل الحصول على أوامر"
+      },
+      "success": {
+        "updateStatus": "ترتيب تحديث"
+      }
+    }
   }
 }
