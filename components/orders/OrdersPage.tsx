@@ -40,35 +40,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-interface OrderProduct {
-  code: string;
-  imageUrl: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-interface ShippingAddress {
-  address: string;
-  addressdetails: string;
-  city: string;
-  email: string;
-  name: string;
-  phone: string;
-}
-
-interface Order {
-  id: string;
-  orderId: string;
-  date: string;
-  orderProducts: OrderProduct[];
-  paymentMethod: string;
-  shippingAddressModel: ShippingAddress;
-  status: "pending" | "reject" | "approve";
-  totalPrice: number;
-  uId: string;
-}
+import { Order } from "@/hooks/useDashboardData";
 
 export default function OrdersPage() {
   const t = useTranslations("trans");
