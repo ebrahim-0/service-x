@@ -1,19 +1,17 @@
 "use client";
 
 import StatCard from "@/components/dashboard/StatCard";
-import SalesDetailsChart from "@/components/dashboard/SalesDetailsChart";
-import CustomersChart from "@/components/dashboard/CustomersChart";
-import MonthlyIncomeChart from "@/components/dashboard/MonthlyIncomeChart";
-import VisitorsChart from "@/components/dashboard/VisitorsChart";
-import { Users, Package, DollarSign, Clock, Loader } from "lucide-react";
-// Import the correct hook and formatters
+import { Users, Package, DollarSign, Loader } from "lucide-react";
 import {
   useStatCardData,
   formatCurrency,
   formatNumber,
 } from "@/hooks/useDashboardData";
+import { useTranslations } from "next-intl";
 
 const DashboardPage = () => {
+  const t = useTranslations("trans");
+
   // Fetch data using the correct hook for each stat card
   const {
     value: totalUsers,
@@ -61,26 +59,26 @@ const DashboardPage = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">{t("dashboard.title")}</h1>
 
       {/* Top Row Stat Cards - Now using fetched data */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <StatCard
-          title="Total User"
+          title={t("dashboard.totalUsers")}
           value={formatNumber(totalUsers)} // Use fetched data
           icon={Users}
           change={changeUsers ?? ""} // Use fetched change with fallback
           changeType={changeTypeUsers}
         />
         <StatCard
-          title="Total Order"
+          title={t("dashboard.totalOrders")}
           value={formatNumber(totalOrders)} // Use fetched data
           icon={Package}
           change={changeOrders ?? ""} // Use fetched change
           changeType={changeTypeOrders}
         />
         <StatCard
-          title="Total Sales"
+          title={t("dashboard.totalSales")}
           value={formatCurrency(totalSales)} // Use fetched data
           icon={DollarSign}
           change={changeSales ?? ""} // Use fetched change

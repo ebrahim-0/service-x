@@ -125,7 +125,7 @@ const calculateChange = (
 // Format currency
 export const formatCurrency = (amount: number | null | undefined) => {
   if (amount === null || amount === undefined) return "$...";
-  return `EGP${amount.toLocaleString(undefined, {
+  return `EGP ${amount.toLocaleString(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   })}`;

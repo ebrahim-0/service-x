@@ -206,6 +206,12 @@
       "success": {
         "updateStatus": "order updated"
       }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "totalUsers": "Total User",
+      "totalOrders": "Total Order",
+      "totalSales": "Total Sales"
     }
   }
 }
