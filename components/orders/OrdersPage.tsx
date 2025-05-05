@@ -230,14 +230,6 @@ export default function OrdersPage() {
   // Pagination logic
   const totalPages = Math.ceil(totalOrders / itemsPerPage);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen justify-center items-center">
-        <Loader className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <div className="">
       <div className="max-w-full sm:max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -270,131 +262,139 @@ export default function OrdersPage() {
               </Button>
             )}
           </div>
-          {orders.length === 0 && totalOrders === 0 ? (
-            <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">
-              {statusFilter && statusFilter !== "all"
-                ? t("orders.noOrdersFound")
-                : t("orders.noOrders")}
-            </p>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {orders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={(e) => {
-                      // Prevent dialog from opening when clicking the Select component
-                      if (
-                        !(e.target as HTMLElement).closest(".select-trigger")
-                      ) {
-                        openDetailsDialog(order);
-                      }
-                    }}
-                  >
-                    <div className="space-y-2 text-sm sm:text-base">
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("orders.orderId")}:
-                        </span>{" "}
-                        <span className="text-gray-800">
-                          {order.orderId.slice(0, 15)}...
-                        </span>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("orders.date")}:
-                        </span>{" "}
-                        <span className="text-gray-800">
-                          {new Date(order.date).toLocaleString()}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">
-                          {t("orders.status")}:
-                        </span>{" "}
-                        <Select
-                          value={order.status}
-                          onValueChange={(value) =>
-                            updateOrderStatus(
-                              order.id,
-                              value as "pending" | "approve" | "reject"
-                            )
-                          }
-                          disabled={statusUpdating === order.id}
-                        >
-                          <SelectTrigger
+          <div>
+            {loading ? (
+              <div className="flex h-screen justify-center items-center">
+                <Loader className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 animate-spin" />
+              </div>
+            ) : orders.length === 0 && totalOrders === 0 ? (
+              <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">
+                {statusFilter && statusFilter !== "all"
+                  ? t("orders.noOrdersFound")
+                  : t("orders.noOrders")}
+              </p>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {orders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={(e) => {
+                        // Prevent dialog from opening when clicking the Select component
+                        if (
+                          !(e.target as HTMLElement).closest(".select-trigger")
+                        ) {
+                          openDetailsDialog(order);
+                        }
+                      }}
+                    >
+                      <div className="space-y-2 text-sm sm:text-base">
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("orders.orderId")}:
+                          </span>{" "}
+                          <span className="text-gray-800">
+                            {order.orderId.slice(0, 15)}...
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("orders.date")}:
+                          </span>{" "}
+                          <span className="text-gray-800">
+                            {new Date(order.date).toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-gray-700">
+                            {t("orders.status")}:
+                          </span>{" "}
+                          <Select
+                            value={order.status}
+                            onValueChange={(value) =>
+                              updateOrderStatus(
+                                order.id,
+                                value as "pending" | "approve" | "reject"
+                              )
+                            }
                             disabled={statusUpdating === order.id}
-                            className={cn(
-                              "w-[120px] select-trigger text-xs font-medium rounded-full",
-                              order.status === "pending"
-                                ? "bg-yellow-100 !text-yellow-800"
-                                : "",
-                              order.status === "approve"
-                                ? "bg-green-100 !text-green-800"
-                                : "",
-                              order.status === "reject"
-                                ? "bg-red-100 !text-red-800"
-                                : ""
-                            )}
                           >
-                            <SelectValue />
-                          </SelectTrigger>
+                            <SelectTrigger
+                              dir="rtl"
+                              disabled={statusUpdating === order.id}
+                              className={cn(
+                                "w-[120px] select-trigger font-medium rounded-full",
+                                order.status === "pending"
+                                  ? "bg-yellow-100 !text-yellow-800"
+                                  : "",
+                                order.status === "approve"
+                                  ? "bg-green-100 !text-green-800"
+                                  : "",
+                                order.status === "reject"
+                                  ? "bg-red-100 !text-red-800"
+                                  : ""
+                              )}
+                            >
+                              <SelectValue />
+                            </SelectTrigger>
 
-                          <SelectContent>
-                            <SelectItem value="pending">
-                              {t("orders.pending")}
-                            </SelectItem>
-                            <SelectItem value="approve">
-                              {t("orders.approve")}
-                            </SelectItem>
-                            <SelectItem value="reject">
-                              {t("orders.reject")}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("orders.totalPrice")}:
-                        </span>{" "}
-                        <span className="text-gray-800">
-                          {order.totalPrice} {t("currencySymbol")}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("orders.products")}:
-                        </span>{" "}
-                        <ul className="text-gray-800 list-disc list-inside">
-                          {order.orderProducts.map((product, index) => (
-                            <li key={index}>
-                              {product.name} (x{product.quantity}) -{" "}
-                              {product.price} {t("currencySymbol")}
-                            </li>
-                          ))}
-                        </ul>
+                            <SelectContent>
+                              <SelectItem value="pending">
+                                {t("orders.pending")}
+                              </SelectItem>
+                              <SelectItem value="approve">
+                                {t("orders.approve")}
+                              </SelectItem>
+                              <SelectItem value="reject">
+                                {t("orders.reject")}
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("orders.totalPrice")}:
+                          </span>{" "}
+                          <span className="text-gray-800">
+                            {order.totalPrice} {t("currencySymbol")}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("orders.products")}:
+                          </span>{" "}
+                          <ul className="text-gray-800 list-disc list-inside">
+                            {order.orderProducts.map((product, index) => (
+                              <li key={index}>
+                                {product.name} (x{product.quantity}) -{" "}
+                                {product.price} {t("currencySymbol")}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              {totalPages > 1 && (
-                <div className="mt-6">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          className={
-                            currentPage === 1
-                              ? "pointer-events-none opacity-50"
-                              : ""
-                          }
-                        />
-                      </PaginationItem>
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) => (
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <div className="mt-6">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className={
+                              currentPage === 1
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
+                        </PaginationItem>
+                        {Array.from(
+                          { length: totalPages },
+                          (_, i) => i + 1
+                        ).map((page) => (
                           <PaginationItem key={page}>
                             <PaginationLink
                               onClick={() => handlePageChange(page)}
@@ -403,24 +403,24 @@ export default function OrdersPage() {
                               {page}
                             </PaginationLink>
                           </PaginationItem>
-                        )
-                      )}
-                      <PaginationItem>
-                        <PaginationNext
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          className={
-                            currentPage === totalPages
-                              ? "pointer-events-none opacity-50"
-                              : ""
-                          }
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
-            </>
-          )}
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className={
+                              currentPage === totalPages
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 

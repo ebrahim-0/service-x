@@ -33,7 +33,7 @@ import { firestore } from "@/lib/firebase/firebase.browser";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Loader } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ProductsListProps {
@@ -224,7 +224,7 @@ const ProductsList: React.FC<ProductsListProps> = ({
   if (loading) {
     return (
       <div className="flex h-screen justify-center items-center">
-        <p className="text-gray-500 text-sm sm:text-base">{t("loading")}</p>
+        <Loader className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 animate-spin" />
       </div>
     );
   }

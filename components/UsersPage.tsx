@@ -207,14 +207,6 @@ export default function UsersPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex h-screen justify-center items-center">
-        <Loader className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <div className="">
       <div className="max-w-full sm:max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -222,109 +214,118 @@ export default function UsersPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
             {t("users.title")}
           </h1>
-          {users.length === 0 && totalUsers === 0 ? (
-            <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">
-              {t("users.noUsers")}
-            </p>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {users.map((user) => (
-                  <div
-                    key={user.id}
-                    className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="space-y-2 text-sm sm:text-base">
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("users.email")}:
-                        </span>{" "}
-                        <span className="text-gray-800">{user.email}</span>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("users.name")}:
-                        </span>{" "}
-                        <span className="text-gray-800">
-                          {user.displayName || "N/A"}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("users.role")}:
-                        </span>{" "}
-                        <span className="text-gray-800">
-                          {user.isAdmin ? t("users.admin") : t("users.user")}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">
-                          {t("users.status")}:
-                        </span>{" "}
-                        <span
-                          className={`inline-block px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
-                            user.blocked
-                              ? "bg-red-100 text-red-800"
-                              : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {user.blocked
-                            ? t("users.blocked")
-                            : t("users.active")}
-                        </span>
-                      </div>
-                      <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 pt-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className={`flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm ${
-                            user.blocked
-                              ? "border-green-500 text-green-600 hover:bg-green-50"
-                              : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
-                          }`}
-                          onClick={() =>
-                            handleBlockToggle(user.id, user.blocked)
-                          }
-                          disabled={isPending}
-                        >
-                          {user.blocked ? (
-                            <Unlock className="w-3 h-3 sm:w-4 sm:h-4" />
-                          ) : (
-                            <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
-                          )}
-                          {user.blocked ? t("users.unblock") : t("users.block")}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm"
-                          onClick={() => handleDelete(user.id)}
-                          disabled={isPending}
-                        >
-                          <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                          {t("users.delete")}
-                        </Button>
+          <div>
+            {loading ? (
+              <div className="flex h-screen justify-center items-center">
+                <Loader className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 animate-spin" />
+              </div>
+            ) : users.length === 0 && totalUsers === 0 ? (
+              <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">
+                {t("users.noUsers")}
+              </p>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {users.map((user) => (
+                    <div
+                      key={user.id}
+                      className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="space-y-2 text-sm sm:text-base">
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("users.email")}:
+                          </span>{" "}
+                          <span className="text-gray-800">{user.email}</span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("users.name")}:
+                          </span>{" "}
+                          <span className="text-gray-800">
+                            {user.displayName || "N/A"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("users.role")}:
+                          </span>{" "}
+                          <span className="text-gray-800">
+                            {user.isAdmin ? t("users.admin") : t("users.user")}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            {t("users.status")}:
+                          </span>{" "}
+                          <span
+                            className={`inline-block px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                              user.blocked
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {user.blocked
+                              ? t("users.blocked")
+                              : t("users.active")}
+                          </span>
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 pt-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm ${
+                              user.blocked
+                                ? "border-green-500 text-green-600 hover:bg-green-50"
+                                : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                            }`}
+                            onClick={() =>
+                              handleBlockToggle(user.id, user.blocked)
+                            }
+                            disabled={isPending}
+                          >
+                            {user.blocked ? (
+                              <Unlock className="w-3 h-3 sm:w-4 sm:h-4" />
+                            ) : (
+                              <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
+                            )}
+                            {user.blocked
+                              ? t("users.unblock")
+                              : t("users.block")}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="flex w-full sm:w-auto items-center gap-2 text-xs sm:text-sm"
+                            onClick={() => handleDelete(user.id)}
+                            disabled={isPending}
+                          >
+                            <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                            {t("users.delete")}
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              {totalPages > 1 && (
-                <div className="mt-6">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          className={
-                            currentPage === 1
-                              ? "pointer-events-none opacity-50"
-                              : ""
-                          }
-                        />
-                      </PaginationItem>
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) => (
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <div className="mt-6">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className={
+                              currentPage === 1
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
+                        </PaginationItem>
+                        {Array.from(
+                          { length: totalPages },
+                          (_, i) => i + 1
+                        ).map((page) => (
                           <PaginationItem key={page}>
                             <PaginationLink
                               onClick={() => handlePageChange(page)}
@@ -333,24 +334,24 @@ export default function UsersPage() {
                               {page}
                             </PaginationLink>
                           </PaginationItem>
-                        )
-                      )}
-                      <PaginationItem>
-                        <PaginationNext
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          className={
-                            currentPage === totalPages
-                              ? "pointer-events-none opacity-50"
-                              : ""
-                          }
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
-            </>
-          )}
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className={
+                              currentPage === totalPages
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 
