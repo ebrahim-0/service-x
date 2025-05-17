@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Service X",
-  description: "Service X",
+  title: "Car Link",
+  description: "Car Link",
   icons: {
     icon: ["/assets/car-link-logo.svg"],
     apple: ["/assets/car-link-logo.svg"],
