@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   title: "Service X",
   description: "Service X",
   icons: {
-    icon: ["/assets/logo.svg"],
-    apple: ["/assets/logo.svg"],
-    shortcut: ["/assets/logo.svg"],
+    icon: ["/assets/car-link-logo.svg"],
+    apple: ["/assets/car-link-logo.svg"],
+    shortcut: ["/assets/car-link-logo.svg"],
   },
 };
 

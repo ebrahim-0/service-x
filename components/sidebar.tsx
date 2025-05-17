@@ -69,7 +69,11 @@ const Sidebar = () => {
       )}
     >
       <Link href="/" className="flex items-center h-16 px-6 border-b">
-        <img src="/assets/logo.svg" alt="Logo" className="w-full h-12 mr-2" />
+        <img
+          src="/assets/car-link-logo.svg"
+          alt="Logo"
+          className="w-full h-12 mr-2"
+        />
       </Link>
 
       <div className="flex-1 py-4 overflow-auto">

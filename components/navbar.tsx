@@ -19,7 +19,11 @@ const Navbar = () => {
     >
       {isMobile && (
         <Link href="/" className="flex items-center h-16 px-6">
-          <img src="/assets/logo.svg" alt="Logo" className="w-full h-12 mr-2" />
+          <img
+            src="/assets/car-link-logo.svg"
+            alt="Car Link Logo"
+            className="h-8"
+          />
         </Link>
       )}
 
