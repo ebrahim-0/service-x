@@ -4,7 +4,11 @@
       "invalid_email": "عنوان البريد الإلكتروني غير صالح",
       "username_min_length": "يجب أن يكون اسم المستخدم 3 أحرف على الأقل",
       "password_min_length": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
-      "password_required": "كلمة المرور مطلوبة"
+      "password_required": "كلمة المرور مطلوبة",
+      "code_required": "رمز المنتج مطلوب",
+      "name_required": "اسم المنتج مطلوب",
+      "description_required": "وصف المنتج مطلوب",
+      "positive_number": "يجب أن يكون السعر رقماً موجباً"
     },
     "auth": {
       "login": {

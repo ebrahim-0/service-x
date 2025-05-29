@@ -4,7 +4,11 @@
       "invalid_email": "Invalid email address",
       "username_min_length": "Username must be at least 3 characters",
       "password_min_length": "Password must be at least 6 characters",
-      "password_required": "Password is required"
+      "password_required": "Password is required",
+      "code_required": "Product code is required",
+      "name_required": "Product name is required",
+      "description_required": "Product description is required",
+      "positive_number": "Price must be a positive number"
     },
     "auth": {
       "login": {

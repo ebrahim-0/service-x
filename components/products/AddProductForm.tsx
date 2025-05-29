@@ -21,6 +21,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firestore, storage } from "@/lib/firebase/firebase.browser";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useSelector } from "zustore";
 
 interface AddProductFormProps {
   onProductAdded?: () => void; // Optional callback after product is added
@@ -32,6 +33,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   closeDialog,
 }) => {
   const t = useTranslations("trans"); // If using next-intl
+  const user = useSelector("user");
 
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -73,6 +75,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           price: data.price,
           unmissableOffer: data.unmissableOffer || false,
           imageUrl: imageUrl, // Store the URL
+          userId: user?.uid || "", // Add current user's ID
           createdAt: new Date(), // Optional: add a timestamp
         });
 

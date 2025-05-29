@@ -34,6 +34,8 @@ export function PrivateGuard() {
           // Extract password if needed and omit from dispatch
           const { password, ...userData } = docData;
           void password; // Explicitly ignore the password
+          console.log("🚀 ~ unsubscribe ~ userData:", userData);
+          console.log("🚀 ~ unsubscribe ~ user:", user);
 
           dispatch({ user: { ...user, ...userData } });
         }

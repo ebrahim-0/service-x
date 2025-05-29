@@ -28,6 +28,7 @@ import {
   limit,
   orderBy,
   startAfter,
+  where,
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase/firebase.browser";
 import { useTranslations } from "next-intl";
@@ -35,7 +36,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Edit, Trash2, Loader } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import { useSelector } from "zustore";
 interface ProductsListProps {
   refreshKey?: number;
   onProductUpdated?: () => void;
@@ -60,6 +61,7 @@ const ProductsList: React.FC<ProductsListProps> = ({
     productId: string | null;
     productName: string | null;
   }>({ open: false, productId: null, productName: null });
+  const user = useSelector("user");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(
@@ -74,7 +76,15 @@ const ProductsList: React.FC<ProductsListProps> = ({
     setError(null);
     try {
       // Get total count of products
-      const totalSnapshot = await getDocs(collection(firestore, "products"));
+      const totalSnapshot = user?.isSuperAdmin
+        ? await getDocs(collection(firestore, "products"))
+        : await getDocs(
+            query(
+              collection(firestore, "products"),
+              where("userId", "==", user?.uid || "")
+            )
+          );
+
       const total = totalSnapshot.size;
 
       // Calculate the offset for pagination
@@ -83,7 +93,7 @@ const ProductsList: React.FC<ProductsListProps> = ({
       // Query for paginated products
       let productsQuery = query(
         collection(firestore, "products"),
-        orderBy("code"),
+        orderBy("createdAt"),
         limit(itemsPerPage)
       );
 
@@ -92,14 +102,14 @@ const ProductsList: React.FC<ProductsListProps> = ({
         const prevPageSnapshot = await getDocs(
           query(
             collection(firestore, "products"),
-            orderBy("code"),
+            orderBy("createdAt"),
             limit(offset)
           )
         );
         const lastDoc = prevPageSnapshot.docs[prevPageSnapshot.docs.length - 1];
         productsQuery = query(
           collection(firestore, "products"),
-          orderBy("code"),
+          orderBy("createdAt"),
           startAfter(lastDoc),
           limit(itemsPerPage)
         );
@@ -111,7 +121,11 @@ const ProductsList: React.FC<ProductsListProps> = ({
         fetchedProducts.push({ id: doc.id, ...doc.data() } as Product);
       });
 
-      setProducts(fetchedProducts);
+      const userProducts = user?.isSuperAdmin
+        ? fetchedProducts
+        : fetchedProducts.filter((p) => p.userId !== user?.uid);
+
+      setProducts(userProducts);
       setTotalProducts(total);
 
       if (selectedProduct && selectedProduct.id) {

@@ -10,6 +10,7 @@ export const productSchema = (t: (key: string) => string) =>
     imageUrl: z.string().url().optional(), // Store image URL instead of File object
     price: z.coerce.number().positive(t("errors.positive_number")),
     unmissableOffer: z.boolean().optional(), // Special data field
+    userId: z.string().optional(), // User ID of the user who created this product
   });
 
 export type Product = z.infer<ReturnType<typeof productSchema>>;
